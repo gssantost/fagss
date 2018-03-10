@@ -8,7 +8,7 @@ public class QueryFacade {
 	
 	public QueryFacade() {}
 	
-	public String addUser(JSONObject json) {
+	public JSONObject addUser(JSONObject json) {
 		UserDAO userDAO = new UserDAO();
 		return userDAO.insert(json);
 	}

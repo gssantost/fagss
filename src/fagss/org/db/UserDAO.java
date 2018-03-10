@@ -24,9 +24,10 @@ public class UserDAO {
 		this.rs = null;
 	}
 	
-	public String insert(JSONObject json) {
+	public JSONObject insert(JSONObject json) {
+		JSONObject res = new JSONObject();
 		int row;
-		String message = null;
+		//String message = null;
 		
 		try {
 			SingletonProperties sp = SingletonProperties.getInstance();
@@ -49,15 +50,15 @@ public class UserDAO {
 				pstm.setString(5, json.getString("email"));
 				row = pstm.executeUpdate();
 				if (row==1) {
-					System.out.println(MessageFormat.format(sp.getProperty("m3"), 0));
-					message = MessageFormat.format(sp.getProperty("m3"), 0); //RETORNO QUE SE AGREGO SATISFACTORIAMENTE (SOLO PRUEBA)
+					//System.out.println(MessageFormat.format(sp.getProperty("m3"), 0));
+					res.put("message", MessageFormat.format(sp.getProperty("m3"), 0)).put("status", 200);
 				} else {
-					System.out.println(MessageFormat.format(sp.getProperty("m4"), 0));
-					message = MessageFormat.format(sp.getProperty("m4"), 0); //RETORNO QUE HUBO UN ERROR (SOLO PRUEBA)
+					//System.out.println(MessageFormat.format(sp.getProperty("m4"), 0));
+					res.put("message", MessageFormat.format(sp.getProperty("m4"), 0)).put("status", 500);
 				}
 			} else {
-				System.out.println(MessageFormat.format(sp.getProperty("m5"), 0));
-				message = MessageFormat.format(sp.getProperty("m5"), 0); //RETORNO QUE EL USUARIO YA EXISTE
+				//System.out.println(MessageFormat.format(sp.getProperty("m5"), 0));
+				res.put("message", MessageFormat.format(sp.getProperty("m5"), 0)).put("status", 500);
 			}
 			
 		} catch (Exception e) {
@@ -71,7 +72,7 @@ public class UserDAO {
 			}
 		}
 		
-		return message;
+		return res;
 	}
 
 	public JSONObject check(JSONObject json) {

@@ -46,7 +46,7 @@ public class Register extends HttpServlet {
 		if (body.getString("password").trim().equals(body.getString("re-password").trim())) {
 			try {
 				QueryFacade facade = new QueryFacade();
-				String message = facade.addUser(body);
+				JSONObject message = facade.addUser(body);
 				json.put("status", 200).put("message", message);
 				out.print(json);
 			}
