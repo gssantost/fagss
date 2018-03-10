@@ -1,0 +1,81 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Fagss : Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+
+    <link rel="stylesheet" href="dependencies/materialize/css/materialize.css">
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-wrapper black">
+            <a href="#" class="brand-logo">: Fagss :</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-list" class="right hide-on-med-and-down">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="row">
+            <br>
+            <br>
+            <div class="col m4 l4"></div>
+            <div class="col m4 l4 z-depth-4 grey lighten-5 center-align">
+                <p class="flow-text">¿Aún no tienes una cuenta?<strong><a class="teal-text" href="register.html"> Regístrate!</a></strong></p>
+            </div>
+            <div class="col m4 l4"></div>
+        </div>
+    </div>
+
+
+    <div class="row center-align">
+        <br>
+        <div class="col m12 l12">
+            <button class="btn waves-effect waves-light" onclick="send()" id="test">Check Session</button>
+        </div>
+        <br><br><br>
+        <div class="col m12 l12">
+            <button class="btn waves-effect waves-light" onclick="logout()">Log Out</button>
+        </div>
+    </div>
+
+
+    <script src="dependencies/jquery/jquery-3.3.1.js"></script>
+    <script src="dependencies/materialize/js/materialize.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/XhrProm.js"></script>
+
+    <script>
+        function send() {
+            const xhr = new XhrPromise({url: './Login', method: 'GET'});
+            xhr.get().then(res => {
+                console.log(res);
+                Materialize.toast(res.message, 4000);
+            });
+        }
+
+        function logout() {
+            const xhr = new XhrPromise({url: './SessionEnd', method: 'GET'});
+            xhr.get().then(res => console.log(res));
+        }
+        
+        
+    </script>
+
+</body>
+
+</html>
