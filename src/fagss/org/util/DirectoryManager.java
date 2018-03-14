@@ -5,8 +5,7 @@ import java.io.File;
 public class DirectoryManager {
 	
 	public static void createStoragePath() {
-		/*BUSCAMOS EL PATH USER.HOME (Ej. C:\\Users\\Giovanny Santos) y le agregamos el nombre de nuestro directorio para almacenar contenido del sitio*/
-		File folder = new File(System.getProperty("user.home") + "\\fagss-storage");
+		File folder = new File(System.getProperty("user.home") + "\\fazt-storage");
 		if (!folder.exists()) {
 			if (folder.mkdir()) {
 				System.out.println("Directorio de almacenamiento creado satisfactoriamente");

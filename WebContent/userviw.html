@@ -1,0 +1,91 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Fazt :: MiCanal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" href="./dependencies/materialize/css/materialize.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper black">
+            <a href="#" class="brand-logo">: Fazt :</a>
+            <ul id="nav-list" class="right">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row">
+        <h1 class="teal-text center-align" id="title"></h1>
+    </div>
+
+    <div class="container">
+        <div class="row center-align">
+            <div class="row">
+                <div class="input-field">
+                    <label for="name">Nombre: </label>
+                    <input type="text" name="name" id="name" class="validate">
+                </div>
+                <div class="input-field">
+                    <label for="description">Descripción: </label>
+                    <input type="text" name="description" id="descrip" class="validate">
+                </div>
+
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Archivo: </span>
+                        <input type="file" name="file" id="file" accept="video/*">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input type="text" class="file-path validate">
+                    </div>
+                </div>
+
+                <button class="btn waves-effect waves-light" onclick="upload()">Subir!</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col m12 l12 right-align">
+            <a href="index.html"><button class="btn waves-effect waves-light blue-grey">Regresar</button></a>
+        </div>
+    </div>
+
+    <script src="./dependencies/jquery/jquery-3.3.1.js"></script>
+    <script src="./dependencies/materialize/js/materialize.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/XhrProm.js"></script>
+    
+    <script>
+    	function load() {
+            
+            let config = {
+                withCredentials: true,                
+                credentials: 'same-origin',
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded"
+                }
+            }
+            
+    		fetch('./Login', config)
+    		.then((resolve) => resolve.json())
+            .then(data => {
+                console.log(data);
+                $('title').innerHTML += data.session.message;
+            })
+            .catch(reject => Materialize.toast(reject))
+    	}
+    	
+    	load();
+    </script>
+
+</body>
+
+</html>

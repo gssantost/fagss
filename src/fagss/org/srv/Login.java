@@ -54,7 +54,6 @@ public class Login extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
 		JSONObject reqBody = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
-		System.out.println(reqBody);
 		QueryFacade facade = new QueryFacade();
 		JSONObject data = facade.checkUser(reqBody);
 		JSONObject json = new JSONObject();

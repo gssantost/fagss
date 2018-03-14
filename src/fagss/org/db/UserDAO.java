@@ -27,7 +27,6 @@ public class UserDAO {
 	public JSONObject insert(JSONObject json) {
 		JSONObject res = new JSONObject();
 		int row;
-		//String message = null;
 		
 		try {
 			PropertiesMap pm = new PropertiesMap();
@@ -39,7 +38,6 @@ public class UserDAO {
 			
 			if (!rs.next()) {
 				rs.close();
-				pstm.close();
 				Encrypter en = new Encrypter();
 				String securedPassword = en.getSecurePassword(json.getString("password"));
 				pstm = con.prepareStatement(pm.getValue("Queries", "Q2"));
@@ -53,7 +51,6 @@ public class UserDAO {
 					//System.out.println(MessageFormat.format(sp.getProperty("m3"), 0));
 					res.put("message", MessageFormat.format(pm.getValue("Messages", "m3"), 0)).put("status", 200);
 				} else {
-					//System.out.println(MessageFormat.format(sp.getProperty("m4"), 0));
 					res.put("message", MessageFormat.format(pm.getValue("Messages", "m4"), 0)).put("status", 500);
 				}
 			} else {

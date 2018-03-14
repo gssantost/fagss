@@ -8,7 +8,7 @@ import java.util.Properties;
 public class SingletonProperties {
 	
 	private static SingletonProperties instance = null;
-	private final String src = "C:\\Users\\Fabiola\\eclipse-workspace\\fagss-master\\fagss-master\\src\\fagss\\org\\config.properties";
+	private final String src = "C:\\Users\\Giovanny Santos\\ee-workspace\\Fagss\\src\\fagss\\org\\config.properties";
 	private Properties p;
 	
 	private SingletonProperties() {

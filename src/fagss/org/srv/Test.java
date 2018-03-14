@@ -1,8 +1,6 @@
 package fagss.org.srv;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,18 +10,19 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
+import fagss.org.db.Media;
 
 /**
- * Servlet implementation class SessionEnd
+ * Servlet implementation class Test
  */
-@WebServlet("/SessionEnd")
-public class SessionEnd extends HttpServlet {
+@WebServlet("/Test")
+public class Test extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SessionEnd() {
+    public Test() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,19 +31,16 @@ public class SessionEnd extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		JSONObject json = new JSONObject();
 		
-		if (session.isNew()) {
-			json.put("status", 200).put("message", "session not started");
-			session.invalidate();
-		} else {
-			json.put("status", 200).put("message", "session finished");
-			session.invalidate();
-		}
-		out.print(json);
+		System.out.println(session.getAttribute("session"));
+		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+		JSONObject data = new JSONObject();
+		data.put("url", "C:/u").put("name", "test").put("filename", "abc.mp4").put("description", "prueba desde Java").put("username", "gsantos");
+		Media med = new Media();
+		JSONObject res = med.setMedia(data);
+		System.out.println(res.toString());
 	}
 
 	/**

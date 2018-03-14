@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Fagss : Home</title>
+    <title>Fazt : Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0">
 
@@ -14,16 +14,18 @@
 
     <nav>
         <div class="nav-wrapper black">
-            <a href="#" class="brand-logo">: Fagss :</a>
-            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-            <ul id="nav-list" class="right hide-on-med-and-down">
+            <a href="#" class="brand-logo">: Fazt :</a>
+            <!-- <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a> -->
+            <ul id="nav-list" class="right">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="login.html">Log In</a></li>
             </ul>
+            <!-- 
             <ul class="side-nav" id="mobile-demo">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="login.html">Log In</a></li>
             </ul>
+            -->
         </div>
     </nav>
 
@@ -50,6 +52,10 @@
         <div class="col m12 l12">
             <button class="btn waves-effect waves-light" onclick="logout()">Log Out</button>
         </div>
+        <br><br><br>
+        <div class="col m12 l12">
+            <a href="userviw.html"><button class="btn waves-effect waves-light">Ver Perfil</button></a>
+        </div>
     </div>
 
 
@@ -60,20 +66,23 @@
     <script src="js/XhrProm.js"></script>
 
     <script>
+        
+        const config = {
+            withCredentials: true,
+                credentials: 'same-origin',
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded"
+                }
+        }
+        
         function send() {
-            const xhr = new XhrPromise({url: './Login', method: 'GET'});
-            xhr.get().then(res => {
-                console.log(res);
-                Materialize.toast(res.message, 4000);
-            });
+            fetch('./Login', config).then(res => res.json()).then(data => console.log(data));
         }
 
         function logout() {
-            const xhr = new XhrPromise({url: './SessionEnd', method: 'GET'});
-            xhr.get().then(res => console.log(res));
+            fetch('./SessionEnd', config).then(res => res.json()).then(data => console.log(data));
         }
-        
-        
+
     </script>
 
 </body>

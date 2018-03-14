@@ -17,27 +17,27 @@ import javax.servlet.http.Part;
 
 import org.json.JSONObject;
 
+import fagss.org.facade.QueryFacade;
+
 /**
- * Servlet implementation class MediaUpload
+ * SERVLET implementation class MediaUpload
  */
 @MultipartConfig
 @WebServlet("/MediaUpload")
 public class MediaUpload extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public MediaUpload() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public MediaUpload() {
+		super();
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -46,49 +46,57 @@ public class MediaUpload extends HttpServlet {
 	 */
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		    HttpSession session = request.getSession();
-		    Part file =request.getPart("file");
-			//Collection <Part> form = request.getParts();
-			InputStream filecontent = file.getInputStream();
-			OutputStream os = null;
-			String path ="C:\\Users\\Fabiola\\Desktop\\test";
-			PrintWriter out = response.getWriter();
-			JSONObject message =new JSONObject();
-		
-			
-			try {
-				if (!session.isNew()) {
-					String fileName = this.getFileName(file);
-					File folder =new File(path +"\\" +session.getAttribute("email"));
-					path =path +"\\" + session.getAttribute("email") + "\\" +fileName;
-					if(!folder.exists())
-						folder.mkdir();
+		HttpSession session = request.getSession();
+		Part file = request.getPart("file");
+		InputStream filecontent = file.getInputStream();
+		OutputStream os = null;
+		String path = System.getProperty("user.home") + "\\fazt-storage";
+		PrintWriter out = response.getWriter();
+		JSONObject json = (JSONObject) session.getAttribute("session");
+		JSONObject data = new JSONObject();
+		JSONObject resolve;
+		System.out.println(json.toString());
+
+		try {
+			if (!session.isNew()) {
+				String fileName = this.getFileName(file);
+				File folder = new File(path +"\\" + json.getString("username"));
+				path = path + "\\" + json.getString("username") + "\\" + fileName;
+				
+				if (!folder.exists()) {
+					folder.mkdir();
+				}
+
 				os = new FileOutputStream(path);
 				int read = 0;
 				byte[] bytes = new byte[1024];
-	
+
 				while ((read = filecontent.read(bytes)) != -1) {
 					os.write(bytes, 0, read);
 				}
-				message.put("status",200);
-				}
-				} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (filecontent != null) {
-					filecontent.close();
-				}
-				if (os != null) {
-					os.close();
-				}
+				
+				data.put("url", path);
+				data.put("name", request.getParameter("name"));
+				data.put("description", request.getParameter("description"));
+				data.put("filename", fileName);
+				data.put("username", json.getString("username"));
+				QueryFacade facade = new QueryFacade();
+				resolve = facade.upload(data);
+				out.print(resolve);
 			}
-			
-			out.print("AQUIII");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (filecontent != null) {
+				filecontent.close();
 			}
-	
-	
-	// Esta funcion permite obtener el nombre del archivo
+			if (os != null) {
+				os.close();
+			}
+		}
+	}
+
+	// ÉSTA FUNCIÓN 
 	private String getFileName(Part file) {
 		for (String content :  file.getHeader("content-disposition").split(";")) {
 			if (content.trim().startsWith("filename")) {

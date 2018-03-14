@@ -31,7 +31,6 @@ public class FirstListener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0)  { 
-         // TODO Auto-generated method stub
 		DirectoryManager.createStoragePath();
 	}
 	

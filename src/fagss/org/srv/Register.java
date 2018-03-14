@@ -42,7 +42,6 @@ public class Register extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		JSONObject body = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		JSONObject json = new JSONObject();
-		System.out.println(body);
 		if (body.getString("password").trim().equals(body.getString("re-password").trim())) {
 			try {
 				QueryFacade facade = new QueryFacade();
