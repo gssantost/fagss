@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Calendar;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import fagss.org.util.PropertiesMap;
@@ -15,6 +18,8 @@ public class Media {
 	
 	private Connection con = null;
 	private PreparedStatement pstm = null;
+	private ResultSet rs = null;
+	private ResultSetMetaData rsmd = null;
 	
 	public JSONObject setMedia(JSONObject json) {
 		JSONObject res = new JSONObject();
@@ -53,13 +58,26 @@ public class Media {
 		return res;
 	}
 	
-	public JSONObject getMedia() {
-		JSONObject res = new JSONObject();
+	public JSONArray getUserMedia(JSONObject json) {
+		JSONArray res = new JSONArray();
 		PropertiesMap prop = new PropertiesMap();
 		
 		try {
 			Class.forName(prop.getValue("DB", "driver"));
 			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			pstm = con.prepareStatement(prop.getValue("Queries", "Q6"), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			pstm.setString(1, json.getString("username"));
+			rs = pstm.executeQuery();
+			rsmd = rs.getMetaData();
+			rs.beforeFirst();
+			while (rs.next()) {
+				JSONObject row = new JSONObject();
+				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					row.put(rsmd.getColumnLabel(i), rs.getObject(i));
+				}
+				res.put(row);
+			}
+			
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -69,9 +87,37 @@ public class Media {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}	
+		return res;
+	}
+	
+	
+	public JSONObject getMedia(JSONObject json) {
+		JSONObject res = new JSONObject();
+		PropertiesMap prop = new PropertiesMap();
+		
+		try {
+			Class.forName(prop.getValue("DB", "driver"));
+			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			pstm = con.prepareStatement(prop.getValue("Queries", "Q7"));
+			pstm.setString(1, json.getString("name"));
+			rs = pstm.executeQuery();
+			
+			while (rs.next()) {
+				res.put("url", rs.getString(1)).put("filename", rs.getString(2));
+			}
+			
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.printStackTrace();
+			res.put("message", "no se ha podido descargar");
+		} finally {
+			try {
+				pstm.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		
 		
 		return res;
 	}

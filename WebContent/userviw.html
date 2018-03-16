@@ -49,6 +49,16 @@
                 <button class="btn waves-effect waves-light" onclick="upload()">Subir!</button>
             </div>
         </div>
+        <br>
+        <br>
+
+        <div class="row">
+        <h5 class="flow-text center-align">Videos</h5>
+        <ul id="video-list" class="flow-text center-align"></ul>
+        <!-- <button class="btn waves-effect waves-light" onclick="download()">Descargar!</button> -->
+        
+        </div>
+
     </div>
 
     <div class="row">
@@ -62,28 +72,37 @@
 
     <script src="js/main.js"></script>
     <script src="js/XhrProm.js"></script>
-    
+
     <script>
-    	function load() {
-            
+        function load() {
             let config = {
-                withCredentials: true,                
+                withCredentials: true,
                 credentials: 'same-origin',
                 headers: {
                     "Content-type": "application/x-www-form-urlencoded"
                 }
             }
-            
-    		fetch('./Login', config)
-    		.then((resolve) => resolve.json())
-            .then(data => {
-                console.log(data);
-                $('title').innerHTML += data.session.message;
-            })
-            .catch(reject => Materialize.toast(reject))
-    	}
-    	
-    	load();
+
+            fetch('./Login', config)
+                .then((resolve) => resolve.json())
+                .then(data => {
+                    console.log(data);
+                    $('title').innerHTML += data.session.message;
+                })
+                .catch(reject => Materialize.toast(reject))
+
+
+            fetch('./MediaLoad', config)
+                .then(resolve => resolve.json())
+                .then(data => {
+                    console.log(data);
+                    for (let i=0; i < data.length; i++) {
+                        $('video-list').innerHTML += `<a href="./MediaDownload?name=${data[i].media_name}">${data[i].media_name}</a><br>`;
+                    }
+                })
+        }
+        
+        load();
     </script>
 
 </body>
