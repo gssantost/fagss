@@ -1,0 +1,41 @@
+.body {
+	min-width: 100%;
+	text-align: center;
+}
+
+.all {
+	width: 50%;
+	margin: 0 auto;
+}
+
+.likes {
+	height: 10px !important;
+	padding: 0 !important width: 50%;
+	padding: 0 !important;
+	float: left;
+	width: 50%;
+	background: #448aff
+}
+
+.dislikes {
+	height: 10px !important;
+	padding: 0 !important width: 50%;
+	padding: 0 !important;
+	float: right;
+	width: 50%;
+	background: #c62828; 
+}
+
+.bar {
+	margin: 0 auto;
+	width: 60%;
+}
+
+.centrado{
+    position: absolute;
+    top: em;
+    left: 579px;
+    width: 20%;
+    align-self: center;
+}
+}
