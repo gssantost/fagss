@@ -14,7 +14,9 @@
 	padding: 0 !important;
 	float: left;
 	width: 50%;
-	background: #448aff
+	background: #448aff;
+	-webkit-border-radius: 10px 0px 0px 10px;
+    border: 0px solid #000000;
 }
 
 .dislikes {
@@ -24,6 +26,9 @@
 	float: right;
 	width: 50%;
 	background: #c62828; 
+	-webkit-border-radius: 0px 10px 10px 0px;
+    border: 0px solid #000000;
+}
 }
 
 .bar {
@@ -34,8 +39,15 @@
 .centrado{
     position: absolute;
     top: em;
-    left: 579px;
-    width: 20%;
+    left: 550px;
+    width: 21%;
     align-self: center;
+}
+
+.individual1{
+	float:left;
+}
+.individual2{
+	float:right;
 }
 }
