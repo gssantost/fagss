@@ -39,5 +39,9 @@ public class QueryFacade {
 	public String getVideo(int id) {
 		return this.media.getVideo(id);
 	}
+	
+	public JSONObject likes(JSONObject json) {
+		return this.media.likes(json);
+	}
 
 }

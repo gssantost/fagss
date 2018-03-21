@@ -153,4 +153,37 @@ public class Media {
 		return res;
 	}
 
+	public JSONObject likes(JSONObject json) {
+		JSONObject res= new JSONObject();
+		PropertiesMap prop = new PropertiesMap();
+		
+		try {
+			Class.forName(prop.getValue("DB", "driver"));
+			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			pstm= con.prepareStatement(prop.getValue("Queries", "Q12"));
+			pstm.setString(1, json.getString("username"));
+			pstm.setString(2, json.getString("username"));
+			rs= pstm.executeQuery();
+			if (pstm.executeUpdate() == 1) {
+				res.put("message", "te ha gustado");
+			} else {
+				res.put("message", "no se ha podido insertar");
+			}
+
+						
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstm.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return res;
+	}
+
 }

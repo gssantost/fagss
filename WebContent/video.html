@@ -3,64 +3,131 @@
 <html>
 
 <head>
-    <title>Fazt :: MiCanal</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1.0">
-    <link rel="stylesheet" href="./dependencies/materialize/css/materialize.css">
+<title>Fazt :: MiCanal</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1.0">
+<link rel="stylesheet"
+	href="./dependencies/materialize/css/materialize.css">
+<link rel="stylesheet" href="dependencies/materialize/css/estilo.css">
 </head>
 
 <body>
-    <nav>
-        <div class="nav-wrapper grey lighten-5">
-            <a href="#" class="brand-logo black-text">: Fazt :</a>
-            <ul id="nav-list" class="right">
-                <li><a href="index.html" class="teal-text darken-3">Home</a></li>
-                <li><a id="user-anchor" class="teal-text darken-3"></a></li>
-                <li><a id="session-anchor" class="teal-text darken-3"></a></li>
-            </ul>
-        </div>
-    </nav>
-    <br>
-    <div class="row">
-        <div class="col l2 grey lighten-3 z-depth-1-half" id="user-bar">
+	<nav>
+		<div class="nav-wrapper grey lighten-5">
+			<a href="#" class="brand-logo black-text">: Fazt :</a>
+			<ul id="nav-list" class="right">
+				<li><a href="index.html" class="teal-text darken-3">Home</a></li>
+				<li><a id="user-anchor" class="teal-text darken-3"></a></li>
+				<li><a id="session-anchor" class="teal-text darken-3"></a></li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	<div class="row">
+		<div class="col l2 grey lighten-3 z-depth-1-half" id="user-bar">
 
-        </div>
+		</div>
 
-        <div class="col l10">
-            <div class="row"> <!-- CONTENEDOR DEL VIDEO Y SUS LIKES COMMENTS ETC.... -->
-                <h1 class="teal-text center-align" id="title"></h1>
-                <video id="media" class="responsive-video" controls autoplay></video>
-                <div class="divider"></div>
-                <div class="section">
-                   <div class="chip" id="user-chip"></div>
-                    <h5 id="name" class="teal-text darken-3"></h5>
-                    <span class="badge" id="views">VIEWS </span>
-                    <small id="date"></small>
-                    <p id="description"></p>
-                </div>
-                 <div class="divider"></div>
-                 <div class="section">
-                    <h5 class="teal-text darken-3">Comentarios</h5>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="col l10">
+			<div class="row">
+				<!-- CONTENEDOR DEL VIDEO Y SUS LIKES COMMENTS ETC.... -->
+				<h1 class="teal-text center-align" id="title"></h1>
+				<video id="media" class="responsive-video" controls autoplay></video>
+				<div class="divider"></div>
+				<div class="section">
+					<div class="all" id="all">
+						<div id="bar">
+							<div class="likes" id="likes"></div>
+							<div class="dislikes" id="dislikes"></div>
+						</div>
+						<br>
+						<div class="centrado">
+							<div class="individual1">
 
-    <div class="row">
-        <div class="col m12 l12 right-align">
-            <a href="userview.html"><button class="btn waves-effect waves-light blue-grey">Regresar</button></a>
-        </div>
-    </div>
+								<input type="button" class="btn waves-effect waves-light"
+									value="Like" onclick="like()" />
+							</div>
+							<div class="individual2">
+								<input type="button" class="btn waves-effect waves-light"
+									value="disLike" onclick="dislike()" />
 
-    <script src="./dependencies/jquery/jquery-3.3.1.js"></script>
-    <script src="./dependencies/materialize/js/materialize.js"></script>
+							</div>
+							</div>
+						</div>
+						<h5 id="name" class="teal-text darken-3"></h5>
+						<span class="badge" id="views">VIEWS </span> <small id="date"></small>
+						<p id="description"></p>
+					</div>
+					<br>
+					<div class="divider"></div>
+					<div class="section">
+						<h5 class="teal-text darken-3">Comentarios</h5>
+					</div>
+				</div>
+			</div>
 
-    <script src="js/loginService.js"></script>
-    <script src="js/streaming.js"></script>
-    <script>
-        navRender();
+		</div>
+		<div class="row">
+			<div class="col m12 l12 right-align">
+				<a href="userview.html"><button
+						class="btn waves-effect waves-light blue-grey">Regresar</button></a>
+			</div>
+		</div>
 
-    </script>
+		<script src="./dependencies/jquery/jquery-3.3.1.js"></script>
+		<script src="./dependencies/materialize/js/materialize.js"></script>
+
+		<script src="js/loginService.js"></script>
+		<script src="js/streaming.js"></script>
+		<script src="./dependencies/jquery/jquery-3.3.1.js"></script>
+		<script src="./dependencies/materialize/js/materialize.js"></script>
+		<script>
+			navRender();
+		</script>
 </body>
+<script type="text/javascript">
+	var likes = 0, dislikes = 0;
+
+	function like() {
+		likes++;
+		calculateBar();
+	}
+
+	function dislike() {
+		dislikes++;
+		calculateBar();
+	}
+
+	function calculateBar() {
+		var total = likes + dislikes;
+		var percentageLikes = (likes / total) * 100;
+		var percentageDislikes = (dislikes / total) * 100;
+
+		document.getElementById('likes').style.width = percentageLikes
+				.toString()
+				+ "%";
+		document.getElementById('dislikes').style.width = percentageDislikes
+				.toString()
+				+ "%";
+		
+		const config = {
+				method: 'post',
+			    withCredentials: true,
+			    credentials: 'same-origin',
+			    headers: {
+			        "Content-type": "application/x-www-form-urlencoded"
+			    }
+			}
+		
+		    fetch('./SetLike', config)
+		        .then(res => res.json())
+		        .then(data => {
+		            data=> console.log(data);
+		        })
+		}
+		
+	
+	calculateBar();
+</script>
 
 </html>
