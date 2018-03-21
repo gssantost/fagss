@@ -16,28 +16,72 @@ function isEmpty(obj) {
     return false;
 }
 
-function $(id) {
-    return document.getElementById(id);
+const handleFormLogin = e => {
+    e.preventDefault();
+    const data = formToJson(formLogin.elements);
+    if (isEmpty(data)) {
+        alert("No se puede enviar un formulario vacío. Revise los campos");
+    } else {
+        login(data);
+    }
 }
 
-function upload() {
-    const fd = new FormData();
-    fd.append('file', document.getElementById('file').files[0]);
-    fd.append('name', document.getElementById('name').value);
-    fd.append('description', document.getElementById('descrip').value);
+const handleFormRegister = e => {
+    e.preventDefault();
+    const data = formToJson(formRegister.elements);
+    if (isEmpty(data)) {
+        alert("No se puede enviar un formulario vacío. Revise los campos");
+    } else {
+        register(data);
+    }
+}
 
-    let configs = {
-        method: 'POST',
+function login(data) {
+    let config = {
+        method: 'post',
         withCredentials: true,
         credentials: 'same-origin',
-        body: fd
+        headers: {
+            "Content-type": "application/x-www-form-urlencoded"
+        },
+        body: JSON.stringify(data)
     }
-    fetch('./MediaUpload', configs)
-        .then(response => response.json())
+
+    fetch('./Login', config)
+        .then(resolve => resolve.json())
         .then(data => {
             console.log(data);
-        }).catch(error => {
-            console.log(error.message);
+            Materialize.toast(data.res, 2000);
+            //localStorage.setItem("userInfo", JSON.stringify(data.session));
+            setInterval(() => {
+                window.location.href = "userview.html";
+            }, 2000);
+        })
+        .catch(reject => {
+            Materialize.toast("Imposible iniciar sesión: " + reject);
         })
 }
 
+function register(data) {
+    let config = {
+        method: 'post',
+        withCredentials: true,
+        credentials: 'same-origin',
+        headers: {
+            'Content-type': 'application/x-www-form-urlencoded'
+        },
+        body: JSON.stringify(data)
+    }
+
+    fetch('./Register', config)
+        .then(resolve => resolve.json())
+        .then(data => {
+            console.log(data);
+
+        })
+}
+
+const formLogin = $('login-form');
+const formRegister = $('registry-form');
+formLogin.addEventListener('submit', handleFormLogin);
+formRegister.addEventListener('submit', handleFormRegister);

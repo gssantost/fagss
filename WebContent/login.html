@@ -11,20 +11,21 @@
 </head>
 
 <body>
-
     <nav>
-        <div class="nav-wrapper black">
-            <a href="#" class="brand-logo">: Fazt :</a>
+        <div class="nav-wrapper grey lighten-5">
+            <a href="#" class="brand-logo black-text">: Fazt :</a>
             <ul id="nav-list" class="right">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html">Log In</a></li>
+                <li><a href="index.html" class="teal-text darken-3">Home</a></li>
+                <li><a id="user-anchor" class="teal-text darken-3"></a></li>
+                <li><a id="session-anchor" class="teal-text darken-3"></a></li>
             </ul>
         </div>
     </nav>
 
     <div class="row">
-        <h1 class="teal-text center-align"> Log In </h1>
+        <h1 id="page-title" class="teal-text lighten-5 center-align"> LOGIN </h1>
     </div>
+
     <div class="container">
         <div class="row center-align">
             <div class="col m2 l3"></div>
@@ -108,79 +109,10 @@
     <script src="./dependencies/jquery/jquery-3.3.1.js"></script>
     <script src="./dependencies/materialize/js/materialize.js"></script>
 
+    <script src="js/loginService.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/XhrProm.js"></script>
-
     <script>
-        const handleFormLogin = e => {
-            e.preventDefault();
-            const data = formToJson(formLogin.elements);
-            if (isEmpty(data)) {
-                alert("No se puede enviar un formulario vacío. Revise los campos");
-            } else {
-                login(data);
-            }
-        }
-
-        const handleFormRegister = e => {
-            e.preventDefault();
-            const data = formToJson(formRegister.elements);
-            if (isEmpty(data)) {
-                alert("No se puede enviar un formulario vacío. Revise los campos");
-            } else {
-                register(data);
-            }
-        }
-
-        function login(data) {
-            let config = {
-                method: 'post',
-                withCredentials: true,
-                credentials: 'same-origin',
-                headers: {
-                    "Content-type": "application/x-www-form-urlencoded"
-                },
-                body: JSON.stringify(data)
-            }
-
-            fetch('./Login', config)
-                .then(resolve => resolve.json())
-                .then(data => {
-                    console.log(data);
-                    Materialize.toast(data.res, 2000);
-                    setInterval(() => {
-                        window.location.href = "userviw.html";
-                    }, 2000);
-                })
-                .catch(reject => {
-                    Materialize.toast("Imposible iniciar sesión: " + reject);
-                })
-        }
-
-        function register(data) {
-            let config = {
-                method: 'post',
-                withCredentials: true,
-                credentials: 'same-origin',
-                headers: {
-                    'Content-type': 'application/x-www-form-urlencoded'
-                },
-                body: JSON.stringify(data)
-            }
-
-            fetch('./Register', config)
-                .then(resolve => resolve.json())
-                .then(data => {
-                    console.log(data);
-
-                })
-        }
-
-        const formLogin = $('login-form');
-        const formRegister = $('registry-form');
-        formLogin.addEventListener('submit', handleFormLogin);
-        formRegister.addEventListener('submit', handleFormRegister);
-
+        window.onload = navRender();
     </script>
 </body>
 

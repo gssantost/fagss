@@ -1,0 +1,81 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Fazt :: MiCanal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" href="./dependencies/materialize/css/materialize.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper grey lighten-5">
+            <a href="#" class="brand-logo black-text">: Fazt :</a>
+            <ul id="nav-list" class="right">
+                <li><a href="index.html" class="teal-text darken-3">Home</a></li>
+                <li><a id="user-anchor" class="teal-text darken-3"></a></li>
+                <li><a id="session-anchor" class="teal-text darken-3"></a></li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <div class="row">
+        <div class="col l2 grey lighten-3 z-depth-1-half" id="user-bar">
+
+        </div>
+
+        <div class="col l10">
+            <div class="row">
+                <h1 class="teal-text center-align" id="title"></h1>
+            </div>
+
+            <div class="row center-align">
+                <div class="row">
+                    <div class="input-field">
+                        <label for="name">Nombre: </label>
+                        <input type="text" name="name" id="name" class="validate">
+                    </div>
+                    <div class="input-field">
+                        <label for="description">Descripción: </label>
+                        <input type="text" name="description" id="descrip" class="validate">
+                    </div>
+
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>Archivo: </span>
+                            <input type="file" name="file" id="file" accept="video/*">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input type="text" class="file-path validate">
+                        </div>
+                    </div>
+
+                    <button class="btn waves-effect waves-light" onclick="upload()">Subir!</button>
+                </div>
+            </div>
+            <br>
+            <br>
+            <!-- A ÉSTE DIV SE AÑADEN LOS VIDEOS DE MANERA DINÁMICA -->
+            <div class=row id="video-board">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col m12 l12 right-align">
+            <a href="index.html"><button class="btn waves-effect waves-light blue-grey">Regresar</button></a>
+        </div>
+    </div>
+
+
+    <script src="./dependencies/jquery/jquery-3.3.1.js"></script>
+    <script src="./dependencies/materialize/js/materialize.js"></script>
+
+    <!-- <script src="js/sessiontracker.js"></script> -->
+    <script src="js/loginService.js"></script>
+    <script src="js/updown.js"></script>
+</body>
+
+</html>

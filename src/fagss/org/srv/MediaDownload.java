@@ -38,9 +38,8 @@ public class MediaDownload extends HttpServlet {
 		OutputStream out = null;
 		FileInputStream in = null;
 		QueryFacade facade = new QueryFacade();
-		//JSONObject mediaData = facade.getMediaData((JSONObject) session.getAttribute("session"));
 		JSONObject json = new JSONObject();
-		json.put("name", request.getParameter("name"));
+		json.put("id", request.getParameter("id")); //SE TENÍA UN GET-PARAMETER DE NAME PERO SE CAMBIÓ A BÚSQUEDA POR ID
 		JSONObject mediaData = facade.getMedia(json);
 		System.out.println(mediaData);
 		response.setContentType("file");

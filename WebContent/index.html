@@ -11,78 +11,26 @@
 </head>
 
 <body>
-
     <nav>
-        <div class="nav-wrapper black">
-            <a href="#" class="brand-logo">: Fazt :</a>
-            <!-- <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a> -->
+        <div class="nav-wrapper grey lighten-5">
+            <a href="#" class="brand-logo black-text">: Fazt :</a>
             <ul id="nav-list" class="right">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html">Log In</a></li>
+                <li><a href="index.html" class="teal-text darken-3">Home</a></li>
+                <li><a id="user-anchor" class="teal-text darken-3"></a></li>
+                <li><a id="session-anchor" class="teal-text darken-3"></a></li>
             </ul>
-            <!-- 
-            <ul class="side-nav" id="mobile-demo">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html">Log In</a></li>
-            </ul>
-            -->
         </div>
     </nav>
 
-   <!--
-    <div class="container">
-        <div class="row">
-            <br>
-            <br>
-            <div class="col m4 l4"></div>
-            <div class="col m4 l4 z-depth-4 grey lighten-5 center-align">
-                <p class="flow-text">¿Aún no tienes una cuenta?<strong><a class="teal-text" href="register.html"> Regístrate!</a></strong></p>
-            </div>
-            <div class="col m4 l4"></div>
-        </div>
-    </div>
-    -->
-
     <div class="row center-align">
-        <br>
-        <div class="col m12 l12">
-            <button class="btn waves-effect waves-light" onclick="send()" id="test">Check Session</button>
-        </div>
-        <br><br><br>
-        <div class="col m12 l12">
-            <button class="btn waves-effect waves-light" onclick="logout()">Log Out</button>
-        </div>
-        <br><br><br>
-        <div class="col m12 l12">
-            <a href="userviw.html"><button class="btn waves-effect waves-light">Ver Perfil</button></a>
-        </div>
+        <div id="videoboard"></div>
     </div>
-
 
     <script src="dependencies/jquery/jquery-3.3.1.js"></script>
     <script src="dependencies/materialize/js/materialize.js"></script>
-
-    <script src="js/main.js"></script>
-    <script src="js/XhrProm.js"></script>
-
+    <script src="js/loginService.js"></script>
     <script>
-        
-        const config = {
-            withCredentials: true,
-                credentials: 'same-origin',
-                headers: {
-                    "Content-type": "application/x-www-form-urlencoded"
-                }
-        }
-        
-        function send() {
-            fetch('./Login', config).then(res => res.json()).then(data => console.log(data));
-        }
-
-        function logout() {
-            fetch('./SessionEnd', config).then(res => res.json()).then(data => console.log(data));
-        }
-
+        window.onload = navRender();
     </script>
 
 </body>

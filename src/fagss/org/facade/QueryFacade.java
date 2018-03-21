@@ -28,12 +28,16 @@ public class QueryFacade {
 		return this.media.setMedia(json);
 	}
 	
-	public JSONArray getUserMedia(JSONObject json) {
-		return this.media.getUserMedia(json);
+	public JSONArray getUserMedia(String query, Object...values) {
+		return this.media.getUserMedia(query, values);
 	}
 	
 	public JSONObject getMedia(JSONObject json) {
 		return this.media.getMedia(json);
+	}
+	
+	public String getVideo(int id) {
+		return this.media.getVideo(id);
 	}
 
 }

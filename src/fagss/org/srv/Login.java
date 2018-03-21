@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import fagss.org.facade.QueryFacade;
 
 /**
- * Servlet implementation class Login
+ * SERVLET implementation class Login
  */
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -60,11 +60,10 @@ public class Login extends HttpServlet {
 		
 		if (data.getBoolean("readyState")) {
 			if (session.isNew()) {
-				json.put("status", 200).put("res", "session stored");
 				storeSession(data, session);
+				json.put("status", 200).put("res", "session stored").put("session", session.getAttribute("session"));
 			} else {
 				json.put("status", 200).put("res", "ya existe un usuario en sesion");
-				//storeSession(data, session);
 			}
 			out.print(json);
 		} else {

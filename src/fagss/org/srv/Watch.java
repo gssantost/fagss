@@ -11,17 +11,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fagss.org.facade.QueryFacade;
+
 /**
- * Servlet implementation class PlayVideo
+ * SERVLET implementation class PlayVideo
  */
-@WebServlet("/PlayVideo")
-public class PlayVideo extends HttpServlet {
+@WebServlet("/watch")
+public class Watch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PlayVideo() {
+    public Watch() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,7 +33,10 @@ public class PlayVideo extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletOutputStream out = response.getOutputStream();
-		InputStream in = new FileInputStream(request.getParameter("media_url"));
+		QueryFacade facade = new QueryFacade();
+		String url = facade.getVideo(Integer.parseInt(request.getParameter("id")));
+		System.out.println(url);
+		InputStream in = new FileInputStream(url);
 		String mime = "video/mp4";
 		byte[] bytes = new byte[1024];
 		

@@ -58,15 +58,19 @@ public class Media {
 		return res;
 	}
 	
-	public JSONArray getUserMedia(JSONObject json) {
+	public JSONArray getUserMedia(String query, Object... val) {
 		JSONArray res = new JSONArray();
 		PropertiesMap prop = new PropertiesMap();
 		
 		try {
 			Class.forName(prop.getValue("DB", "driver"));
 			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm = con.prepareStatement(prop.getValue("Queries", "Q6"), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			pstm.setString(1, json.getString("username"));
+			pstm = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			for (int i = 0; i < val.length; i++) {
+				pstm.setObject(i + 1, val[i]);
+			}
+			
 			rs = pstm.executeQuery();
 			rsmd = rs.getMetaData();
 			rs.beforeFirst();
@@ -91,7 +95,7 @@ public class Media {
 		return res;
 	}
 	
-	
+	//AHORA RETORNA LA MEDIA POR ID
 	public JSONObject getMedia(JSONObject json) {
 		JSONObject res = new JSONObject();
 		PropertiesMap prop = new PropertiesMap();
@@ -100,7 +104,7 @@ public class Media {
 			Class.forName(prop.getValue("DB", "driver"));
 			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
 			pstm = con.prepareStatement(prop.getValue("Queries", "Q7"));
-			pstm.setString(1, json.getString("name"));
+			pstm.setInt(1, json.getInt("id"));
 			rs = pstm.executeQuery();
 			
 			while (rs.next()) {
@@ -110,6 +114,33 @@ public class Media {
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 			res.put("message", "no se ha podido descargar");
+		} finally {
+			try {
+				pstm.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return res;
+	}
+	
+	public String getVideo(int id) {
+		String res = null;
+		PropertiesMap prop = new PropertiesMap();
+		
+		try {
+			Class.forName(prop.getValue("DB", "driver"));
+			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			pstm = con.prepareStatement(prop.getValue("Queries", "Q9"));
+			pstm.setInt(1, id);
+			rs = pstm.executeQuery();
+			while (rs.next()) {
+				res = rs.getString(1);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.printStackTrace();
 		} finally {
 			try {
 				pstm.close();
