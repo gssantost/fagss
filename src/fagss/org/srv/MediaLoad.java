@@ -42,7 +42,7 @@ public class MediaLoad extends HttpServlet {
 		QueryFacade facade = new QueryFacade();
 		JSONObject data = (JSONObject) session.getAttribute("session");	
 		JSONArray userVideos = facade.getUserMedia(prop.getValue("Queries", "Q8"), data.getString("username"));
-		out.print(userVideos.toString());
+		out.print(userVideos);
 	}
 
 	

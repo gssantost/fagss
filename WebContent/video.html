@@ -3,12 +3,11 @@
 <html>
 
 <head>
-<title>Fazt :: MiCanal</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="initial-scale=1.0">
-<link rel="stylesheet"
-	href="./dependencies/materialize/css/materialize.css">
-<link rel="stylesheet" href="dependencies/materialize/css/estilo.css">
+	<title>Fazt :: MiCanal</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0">
+	<link rel="stylesheet" href="./dependencies/materialize/css/materialize.css">
+	<link rel="stylesheet" href="dependencies/materialize/css/estilo.css">
 </head>
 
 <body>
@@ -35,99 +34,50 @@
 				<video id="media" class="responsive-video" controls autoplay></video>
 				<div class="divider"></div>
 				<div class="section">
+					<div id="user-chip" class="chip"></div>
+					<h5 id="name" class="teal-text darken-3"></h5>
+					<span class="badge" id="views">VIEWS </span><small id="date"></small>
+					<p id="description"></p>
 					<div class="all" id="all">
 						<div id="bar">
 							<div class="likes" id="likes"></div>
 							<div class="dislikes" id="dislikes"></div>
 						</div>
 						<br>
-						<div class="centrado">
-							<div class="individual1">
-
-								<input type="button" class="btn waves-effect waves-light"
-									value="Like" onclick="like()" />
+						<div class="row">
+							<div class="col l6 center-align">
+								<button class="btn waves-effect waves-light" value="like" onclick="like()">Like</button>
 							</div>
-							<div class="individual2">
-								<input type="button" class="btn waves-effect waves-light"
-									value="disLike" onclick="dislike()" />
-
-							</div>
+							<div class="col l6 center-align">
+								<button class="btn waves-effect waves-light" value="dislike" onclick="dislike()">Dislike</button>
 							</div>
 						</div>
-						<h5 id="name" class="teal-text darken-3"></h5>
-						<span class="badge" id="views">VIEWS </span> <small id="date"></small>
-						<p id="description"></p>
-					</div>
-					<br>
-					<div class="divider"></div>
-					<div class="section">
-						<h5 class="teal-text darken-3">Comentarios</h5>
 					</div>
 				</div>
+				<br>
+				<div class="divider"></div>
+				<div class="section">
+					<h5 class="teal-text darken-3">Comentarios</h5>
+				</div>
 			</div>
-
 		</div>
-		<div class="row">
-			<div class="col m12 l12 right-align">
-				<a href="userview.html"><button
+
+	</div>
+	<div class="row">
+		<div class="col m12 l12 right-align">
+			<a href="userview.html"><button
 						class="btn waves-effect waves-light blue-grey">Regresar</button></a>
-			</div>
 		</div>
+	</div>
 
-		<script src="./dependencies/jquery/jquery-3.3.1.js"></script>
-		<script src="./dependencies/materialize/js/materialize.js"></script>
+	<script src="./dependencies/jquery/jquery-3.3.1.js"></script>
+	<script src="./dependencies/materialize/js/materialize.js"></script>
+	<script src="js/loginService.js"></script>
+	<script src="js/streaming.js"></script>
+	<script>
+		navRender();
 
-		<script src="js/loginService.js"></script>
-		<script src="js/streaming.js"></script>
-		<script src="./dependencies/jquery/jquery-3.3.1.js"></script>
-		<script src="./dependencies/materialize/js/materialize.js"></script>
-		<script>
-			navRender();
-		</script>
+	</script>
 </body>
-<script type="text/javascript">
-	var likes = 0, dislikes = 0;
-
-	function like() {
-		likes++;
-		calculateBar();
-	}
-
-	function dislike() {
-		dislikes++;
-		calculateBar();
-	}
-
-	function calculateBar() {
-		var total = likes + dislikes;
-		var percentageLikes = (likes / total) * 100;
-		var percentageDislikes = (dislikes / total) * 100;
-
-		document.getElementById('likes').style.width = percentageLikes
-				.toString()
-				+ "%";
-		document.getElementById('dislikes').style.width = percentageDislikes
-				.toString()
-				+ "%";
-		
-		const config = {
-				method: 'post',
-			    withCredentials: true,
-			    credentials: 'same-origin',
-			    headers: {
-			        "Content-type": "application/x-www-form-urlencoded"
-			    }
-			}
-		
-		    fetch('./SetLike', config)
-		        .then(res => res.json())
-		        .then(data => {
-		            data=> console.log(data);
-		        })
-		}
-		
-	
-	calculateBar();
-</script>
 
 </html>

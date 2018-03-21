@@ -1,10 +1,10 @@
 const storage = JSON.parse(localStorage.getItem('userInfo'));
-let key = location.href.split('?')[1];
+let param = location.href.split('?')[1];
 
 window.onload = () => {
-    $('media').src = './watch?' + key;
+    $('media').src = './watch?' + param;
 
-    fetch('./Video?' + key, config)
+    fetch('./Video?' + param, config)
         .then(res => res.json())
         .then(data => {
             console.log(data);
@@ -15,3 +15,31 @@ window.onload = () => {
             $('description').innerHTML = data[0].media_des;
         })
 }
+
+var likes = 0,
+    dislikes = 0;
+
+function like() {
+    likes++;
+    calculateBar();
+}
+
+function dislike() {
+    dislikes++;
+    calculateBar();
+}
+
+function calculateBar() {
+    var total = likes + dislikes;
+    var percentageLikes = (likes / total) * 100;
+    var percentageDislikes = (dislikes / total) * 100;
+
+    document.getElementById('likes').style.width = percentageLikes.toString() + "%";
+    document.getElementById('dislikes').style.width = percentageDislikes.toString() + "%";
+
+    fetch('./SetLike?' + param, config)
+        .then(res => res.json())
+        .then(data => console.log(data))
+}
+
+//calculateBar();

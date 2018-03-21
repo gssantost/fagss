@@ -48,13 +48,11 @@ public class UserDAO {
 				pstm.setString(5, json.getString("email"));
 				row = pstm.executeUpdate();
 				if (row==1) {
-					//System.out.println(MessageFormat.format(sp.getProperty("m3"), 0));
 					res.put("message", MessageFormat.format(pm.getValue("Messages", "m3"), 0)).put("status", 200);
 				} else {
 					res.put("message", MessageFormat.format(pm.getValue("Messages", "m4"), 0)).put("status", 500);
 				}
 			} else {
-				//System.out.println(MessageFormat.format(sp.getProperty("m5"), 0));
 				res.put("message", MessageFormat.format(pm.getValue("Messages", "m3"), 0)).put("status", 500);
 			}
 			
@@ -90,6 +88,7 @@ public class UserDAO {
 				res.put("message", MessageFormat.format(pm.getValue("Messages", "m1"), 0)).put("readyState", false);
 			} else {
 				res.put("username", rs.getString(1)).put("typeUser", rs.getInt(2)).put("name", rs.getString(3)).put("lastname", rs.getString(4));
+				res.put("id", rs.getInt(5));
 				res.put("message", MessageFormat.format(pm.getValue("Messages", "m2"), res.getString("username"))).put("readyState", true);
 			}
 			

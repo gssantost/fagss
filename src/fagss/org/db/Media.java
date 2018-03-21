@@ -161,9 +161,8 @@ public class Media {
 			Class.forName(prop.getValue("DB", "driver"));
 			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
 			pstm= con.prepareStatement(prop.getValue("Queries", "Q12"));
-			pstm.setString(1, json.getString("username"));
-			pstm.setString(2, json.getString("username"));
-			rs= pstm.executeQuery();
+			pstm.setInt(1, json.getInt("media_id"));
+			pstm.setInt(2, json.getInt("id_user"));
 			if (pstm.executeUpdate() == 1) {
 				res.put("message", "te ha gustado");
 			} else {

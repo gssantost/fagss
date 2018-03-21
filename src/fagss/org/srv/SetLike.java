@@ -32,7 +32,16 @@ public class SetLike extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out= response.getWriter();
+		HttpSession session= request.getSession();
+		JSONObject json= (JSONObject) session.getAttribute("session");
+		JSONObject data=new JSONObject();
+		JSONObject resolve;
+		data.put("id_user", json.getInt("id")).put("media_id", Integer.parseInt(request.getParameter("id")));
+		QueryFacade facade= new QueryFacade();
+		resolve=facade.likes(data);
+		out.print(resolve);
+		System.out.println(resolve);
 	}
 
 	/**
@@ -49,11 +58,7 @@ public class SetLike extends HttpServlet {
 		resolve=facade.likes(data);
 		out.print(resolve);
 		System.out.println(resolve);
-		
-		
-		
-		
-		
+
 	}
 
 }
