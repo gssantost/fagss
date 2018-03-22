@@ -227,8 +227,8 @@ public class Media {
 			Class.forName(prop.getValue("DB", "driver"));
 			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
 			pstm= con.prepareStatement(prop.getValue("Queries", "Q13"));
-			pstm.setInt(1, json.getInt("media_id"));
-			pstm.setInt(2, json.getInt("id_user"));
+			pstm.setInt(1, json.getInt("id_user"));
+			pstm.setInt(2, json.getInt("media_id"));
 			if (pstm.executeUpdate() == 1) {
 				res.put("message", "has hecho dislike");
 			} else {

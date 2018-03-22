@@ -40,7 +40,7 @@ public class SetDislike extends HttpServlet {
 		JSONObject resolve;
 		data.put("id_user", json.getInt("id")).put("media_id", Integer.parseInt(request.getParameter("id")));
 		QueryFacade facade= new QueryFacade();
-		resolve=facade.likes(data);
+		resolve=facade.dislikes(data);
 		out.print(resolve);
 		System.out.println(resolve);
 	}

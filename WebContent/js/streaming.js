@@ -49,17 +49,13 @@ function calculateBar() {
 }
 
 function comment() {
-    const fd = new FormData();
-    fd.append('comment', $('comment').value);
-
     let configs = {
         method: 'POST',
         withCredentials: true,
-        credentials: 'same-origin',
-        body: fd
+        credentials: 'same-origin'
     }
-
-    fetch('./SetComment' + param, configs)
+    //
+    fetch('./SetComment?' +param + "&comment="+$("comment").value, configs)
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -69,8 +65,9 @@ function comment() {
         })
     
     var texto=  document.getElementById("comment").value;
-    document.getElementById("textToEncode").innerHTML = texto;
-}
+    document.getElementById("textToEncode").value = texto;
+  
+    }
 
 function limpiar() {
     document.getElementById("comment").value = "";

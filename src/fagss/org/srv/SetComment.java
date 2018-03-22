@@ -33,22 +33,7 @@ public class SetComment extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		PrintWriter out = response.getWriter();
-		JSONObject json = (JSONObject) session.getAttribute("session");
-		JSONObject data = new JSONObject();
-		JSONObject resolve;
-		System.out.println(json.toString());
-		data.put("media_id", Integer.parseInt(request.getParameter("id")));
-		data.put("id_user", json.getInt("id"));
-		data.put("comment", request.getParameter("description"));
-		data.put("username", json.getString("username"));
-		QueryFacade facade= new QueryFacade();
-		resolve=facade.comment(data);
-		out.print(resolve);
-		System.out.println(resolve);
 	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -59,10 +44,9 @@ public class SetComment extends HttpServlet {
 		JSONObject json = (JSONObject) session.getAttribute("session");
 		JSONObject data = new JSONObject();
 		JSONObject resolve;
-		System.out.println(json.toString());
 		data.put("media_id", Integer.parseInt(request.getParameter("id")));
 		data.put("id_user", json.getInt("id"));
-		data.put("comment", request.getParameter("description"));
+		data.put("comment", request.getParameter("comment"));
 		data.put("username", json.getString("username"));
 		QueryFacade facade= new QueryFacade();
 		resolve=facade.comment(data);
