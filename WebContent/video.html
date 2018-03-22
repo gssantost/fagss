@@ -58,6 +58,9 @@
 				<div class="divider"></div>
 				<div class="section">
 					<h5 class="teal-text darken-3">Comentarios</h5>
+					<input type="text" size="15" maxlength="30" value="Escriba su comentario..." name="comment" id="comment" onclick="limpiar()">
+					<button class="btn waves-effect waves-light" value="comentario" onclick="comment()">Comentar</button>
+					<input id="textToEncode"></input>
 				</div>
 			</div>
 		</div>
@@ -74,6 +77,7 @@
 	<script src="./dependencies/materialize/js/materialize.js"></script>
 	<script src="js/loginService.js"></script>
 	<script src="js/streaming.js"></script>
+	<script src="js/updown.js"></script>
 	<script>
 		navRender();
 

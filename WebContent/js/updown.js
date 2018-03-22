@@ -1,3 +1,5 @@
+const storage = JSON.parse(localStorage.getItem('userInfo'));
+let param = location.href.split('?')[1];
 fetch('./Login', {withCredentials: true, credentials: 'same-origin', headers: {"Content-type": "application/x-www-form-urlencoded"}})
     .then(res => res.json())
     .then(data => {
@@ -64,3 +66,4 @@ function upload() {
             console.log(error.message);
         })
 }
+

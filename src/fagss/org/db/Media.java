@@ -185,4 +185,70 @@ public class Media {
 		return res;
 	}
 
+	public JSONObject comment(JSONObject json) {
+		JSONObject res= new JSONObject();
+		PropertiesMap prop = new PropertiesMap();
+		Calendar c = Calendar.getInstance();
+		
+		try {
+			Class.forName(prop.getValue("DB", "driver"));
+			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			pstm= con.prepareStatement(prop.getValue("Queries", "Q14"));
+			pstm.setInt(1, json.getInt("media_id"));
+			pstm.setInt(2, json.getInt("id_user"));
+			pstm.setTimestamp(3, new java.sql.Timestamp(c.getTime().getTime()));
+			pstm.setString(4, json.getString("comment"));
+			if (pstm.executeUpdate() == 1) {
+				res.put("message", "comentario insertado");
+			} else {
+				res.put("message", "no se ha podido insertar");
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstm.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return res;
+		
+		}
+
+	public JSONObject dislikes(JSONObject json) {
+		JSONObject res= new JSONObject();
+		PropertiesMap prop = new PropertiesMap();
+		
+		try {
+			Class.forName(prop.getValue("DB", "driver"));
+			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			pstm= con.prepareStatement(prop.getValue("Queries", "Q13"));
+			pstm.setInt(1, json.getInt("media_id"));
+			pstm.setInt(2, json.getInt("id_user"));
+			if (pstm.executeUpdate() == 1) {
+				res.put("message", "has hecho dislike");
+			} else {
+				res.put("message", "no se ha podido insertar");
+			}
+
+						
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstm.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return res;
+
+	}
 }

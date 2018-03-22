@@ -43,5 +43,12 @@ public class QueryFacade {
 	public JSONObject likes(JSONObject json) {
 		return this.media.likes(json);
 	}
+	public JSONObject dislikes(JSONObject json) {
+		return this.media.dislikes(json);
+	}
+	
 
+	public JSONObject comment(JSONObject json) {
+		return this.media.comment(json);
+	}
 }

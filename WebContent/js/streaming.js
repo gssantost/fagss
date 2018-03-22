@@ -22,11 +22,20 @@ var likes = 0,
 function like() {
     likes++;
     calculateBar();
+    
+    fetch('./SetLike?' + param, config)
+    .then(res => res.json())
+    .then(data => console.log(data))
 }
 
 function dislike() {
     dislikes++;
     calculateBar();
+   
+    fetch('./SetDislike?' + param, config)
+    .then(res => res.json())
+    .then(data => console.log(data))
+    
 }
 
 function calculateBar() {
@@ -37,9 +46,36 @@ function calculateBar() {
     document.getElementById('likes').style.width = percentageLikes.toString() + "%";
     document.getElementById('dislikes').style.width = percentageDislikes.toString() + "%";
 
-    fetch('./SetLike?' + param, config)
-        .then(res => res.json())
-        .then(data => console.log(data))
 }
+
+function comment() {
+    const fd = new FormData();
+    fd.append('comment', $('comment').value);
+
+    let configs = {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'same-origin',
+        body: fd
+    }
+
+    fetch('./SetComment' + param, configs)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log(error.message);
+        })
+    
+    var texto=  document.getElementById("comment").value;
+    document.getElementById("textToEncode").innerHTML = texto;
+}
+
+function limpiar() {
+    document.getElementById("comment").value = "";
+}
+
+
 
 //calculateBar();
