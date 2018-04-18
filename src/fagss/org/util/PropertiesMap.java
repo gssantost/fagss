@@ -12,26 +12,48 @@ public class PropertiesMap {
 	private File configDir;
 	private Properties prop;
 	private InputStream in;
-	private HashMap<String, String> map;
+	private HashMap<String, Properties> map;
+	private static PropertiesMap propertyMapInstance = null;
 	
-	public PropertiesMap() {
-		configDir = new File(System.getProperty("catalina.home"), "conf"); //CATALIA.HOME
-		prop = new Properties();
-		map = new HashMap<String, String>();
-		map.put("DB", "config.properties");
-		map.put("Queries", "queries.properties");
-		map.put("Messages", "messages.properties");
+	private PropertiesMap() throws IOException {
+		this.configDir = new File(System.getProperty("catalina.home"), "conf");
+		this.map = new HashMap<String, Properties>();
+		this.map.put("DB", createProperty("config.properties"));
+		this.map.put("Queries", createProperty("queries.properties"));
+		this.map.put("Messages", createProperty("messages.properties"));
 	}
-	 
-	public String getValue(String key, String value) throws IOException {
-		
-		for (HashMap.Entry<String, String> entry : map.entrySet()) {
-			if (entry.getKey().equals(key)) {
-				in = new FileInputStream(new File(configDir, entry.getValue()));
-				prop.load(in);
+	
+	public static PropertiesMap getInstance() {
+		if (propertyMapInstance == null) {
+			synchronized (PropertiesMap.class) {
+				if (propertyMapInstance == null) {
+					try {
+						propertyMapInstance = new PropertiesMap();
+					} catch (IOException e) {
+						System.out.println("Error al crear el Mapa de Propiedades!");
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
-		return prop.getProperty(value);
+		return propertyMapInstance;
+	}
+
+	public String getValue(String key, String value) throws IOException {
+		for (HashMap.Entry<String, Properties> entry : map.entrySet()) {
+			if (entry.getKey().equals(key)) {
+				return entry.getValue().getProperty(value);
+			}
+		}
+		return "false";
 	}
 	
+	private Properties createProperty(String propFile) throws IOException {
+		this.prop = new Properties();
+		this.in = new FileInputStream(new File(this.configDir, propFile));
+		System.out.println("Mapping : " + this.configDir.toString() + "\\" + propFile);
+		prop.load(in);
+		return prop;
+	}
 }

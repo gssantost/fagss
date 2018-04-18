@@ -58,13 +58,14 @@ public class Login extends HttpServlet {
 		JSONObject data = facade.checkUser(reqBody);
 		JSONObject json = new JSONObject();
 		
-		if (data.getBoolean("readyState")) {
+		if (data.getInt("status") == 200) {
 			if (session.isNew()) {
 				storeSession(data, session);
 				json.put("status", 200).put("res", "session stored").put("session", session.getAttribute("session"));
 			} else {
 				json.put("status", 200).put("res", "ya existe un usuario en sesion");
-			}
+				session.invalidate();
+			} 
 			out.print(json);
 		} else {
 			out.print(data);
@@ -73,7 +74,7 @@ public class Login extends HttpServlet {
 	
 	private void storeSession(JSONObject dataToStore, HttpSession session) {
 		if (dataToStore == null) {
-			session.setAttribute("session", dataToStore);
+			session.setAttribute("session", "");
 		} else {
 			session.setAttribute("session", dataToStore);
 		}

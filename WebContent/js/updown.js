@@ -1,37 +1,41 @@
 let param = location.href.split('?')[1];
+
+var modal = document.querySelectorAll('.modal');
+var modalInstance = M.Modal.init(modal);
+
 fetch('./Login', {withCredentials: true, credentials: 'same-origin', headers: {"Content-type": "application/x-www-form-urlencoded"}})
     .then(res => res.json())
     .then(data => {
-        localStorage.setItem("userInfo", JSON.stringify(data.session));
+        localStorage.setItem("userInfo", JSON.stringify(data.session.username));
         console.log(data);
-        })
+        $('title').innerHTML += data.session.message;
+        $('title').classList.add('animated', 'rollIn');
+        $('name').innerHTML += `${data.session.name} ${data.session.lastname}`;
+        $('user').innerHTML += data.session.username;
+        if (data.session.typeUser === 3) {
+            $('type').innerHTML += 'Administrador';
+        } else {
+            $('type').innerHTML += 'Usuario';
+        }
+    })
 
 window.onload = () => {
     load();
 }
 
 function load() {
-    let storage = JSON.parse(localStorage.getItem("userInfo"));
-    console.log(storage);
-    $('title').innerHTML += storage.message;
     navRender();
-
-    $('user-bar').innerHTML =
-        `<div>
-            <p>${storage.name} ${storage.lastname}</p>
-        </div>`;
-
     fetch('./MediaLoad', config)
         .then(resolve => resolve.json())
         .then(data => {
             console.log(data);
             for (let i = 0; i < data.length; i++) {
                 $('video-board').innerHTML +=
-                    `<div class="col">
-                    <div class="card teal" style="margin: 10px 10px; width: 300px;">
+                    `<div class="col center-align">
+                    <div class="card" style="margin: 10px 10px; width: 300px;">
                         <div class="card-content">
                             <span class="card-title">${data[i].media_name}</span>
-                            <p class="white-text">${data[i].media_des}</p>
+                            <p class="grey-text">${data[i].media_des}</p>
                         </div>
                         <div class="card-action">
                             <a href="./MediaDownload?id=${data[i].media_id}"> DESCARGAR </a>
@@ -44,6 +48,8 @@ function load() {
 }
 
 function upload() {
+    if (($('name').value.trim() || $('description').value.trim()) !== '');
+    $('fetch-loader').style.display = 'block';
     const fd = new FormData();
     fd.append('file', $('file').files[0]);
     fd.append('name', $('name').value);
@@ -57,12 +63,22 @@ function upload() {
     }
 
     fetch('./MediaUpload', configs)
-        .then(response => response.json())
+        .then(res => {
+            $('fetch-loader').style.display = 'none';
+            return res.json();
+        })
         .then(data => {
             console.log(data);
+            $('response-text').innerHTML = data.message;
         })
         .catch(error => {
             console.log(error.message);
         })
 }
 
+function moreUpload() {
+    $('name').value = '';
+    $('descrip').value = '';
+    $('file').value = '';
+    $('response-text').value = '';
+}

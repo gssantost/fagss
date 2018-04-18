@@ -1,3 +1,20 @@
+body {
+    background-image: url('../img/medium-sky-blue-solid.jpg');
+}
+
+.base-column {
+    background: #fff;
+}
+
+#fetch-loader {
+    margin-top: 10px;
+    display: none;
+}
+
+.no-back {
+    background: transparent;
+}
+
 .tab a.active {
     color: #4db6ac !important;
     background-color: #fff !important;

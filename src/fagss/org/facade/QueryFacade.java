@@ -3,17 +3,20 @@ package fagss.org.facade;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import fagss.org.db.Comment;
 import fagss.org.db.Media;
-import fagss.org.db.UserDAO;
+import fagss.org.db.User;
 
 public class QueryFacade {
 	
-	private UserDAO user;
+	private User user;
 	private Media media;
+	private Comment comment;
 	
 	public QueryFacade() {
-		this.user = new UserDAO();
+		this.user = new User();
 		this.media = new Media();
+		this.comment = new Comment();
 	}
 	
 	public JSONObject addUser(JSONObject json) {
@@ -28,8 +31,8 @@ public class QueryFacade {
 		return this.media.setMedia(json);
 	}
 	
-	public JSONArray getUserMedia(String query, Object...values) {
-		return this.media.getUserMedia(query, values);
+	public JSONArray getAllVideos(JSONObject json) {
+		return this.media.getAllVideos(json);
 	}
 	
 	public JSONObject getMedia(JSONObject json) {
@@ -40,15 +43,27 @@ public class QueryFacade {
 		return this.media.getVideo(id);
 	}
 	
-	public JSONObject likes(JSONObject json) {
-		return this.media.likes(json);
-	}
-	public JSONObject dislikes(JSONObject json) {
-		return this.media.dislikes(json);
+	public JSONObject setComment(JSONObject json) {
+		return this.comment.setComment(json);
 	}
 	
-
-	public JSONObject comment(JSONObject json) {
-		return this.media.comment(json);
+	public JSONObject banComment(JSONObject json) {
+		return this.comment.banComment(json);
+	}
+	
+	public JSONObject removeVideo(int id) {
+		return this.media.removeVideo(id);
+	}
+	
+	public JSONObject deleteComment(JSONObject json) {
+		return this.comment.deleteComment(json);
+	}
+	
+	public boolean isUserVideo(JSONObject json) {
+		return this.media.isUserVideo(json);
+	}
+	
+	public boolean isUserComment(JSONObject json) {
+		return this.comment.isUserComment(json);
 	}
 }

@@ -1,28 +1,30 @@
 package fagss.org.srv;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
-import fagss.org.db.Media;
+import fagss.org.db.DBHelper;
+import fagss.org.util.PropertiesMap;
 
 /**
- * Servlet implementation class Test
+ * Servlet implementation class UpLike
  */
-@WebServlet("/Test")
-public class Test extends HttpServlet {
+@WebServlet("/UpLike")
+public class UpLike extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Test() {
+    public UpLike() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,16 +33,22 @@ public class Test extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		
-		System.out.println(session.getAttribute("session"));
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		JSONObject data = new JSONObject();
-		data.put("url", "C:/u").put("name", "test").put("filename", "abc.mp4").put("description", "prueba desde Java").put("username", "gsantos");
-		Media med = new Media();
-		JSONObject res = med.setMedia(data);
-		System.out.println(res.toString());
+		// TODO Auto-generated method stub
+		PrintWriter out = response.getWriter();
+		PropertiesMap prop = PropertiesMap.getInstance();
+		DBHelper db = null;
+		//JSONObject json = new JSONObject();
+		JSONArray data = null;
+		try {
+			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			data = db.executeQuery(prop.getValue("Queries", "Q20"), Integer.parseInt(request.getParameter("id")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close();
+		}
+		System.out.println(data);
+		out.print(data);
 	}
 
 	/**

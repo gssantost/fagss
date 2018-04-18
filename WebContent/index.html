@@ -6,14 +6,20 @@
     <title>Fazt : Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0">
-
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="dependencies/materialize/css/materialize.css">
+    <link rel="stylesheet" href="dependencies/animate.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
     <nav>
         <div class="nav-wrapper grey lighten-5">
-            <a href="#" class="brand-logo black-text">: Fazt :</a>
+            <a href="#" class="brand-logo black-text center">
+                F A Z T
+            </a>
             <ul id="nav-list" class="right">
                 <li><a href="index.html" class="teal-text darken-3">Home</a></li>
                 <li><a id="user-anchor" class="teal-text darken-3"></a></li>
@@ -22,16 +28,19 @@
         </div>
     </nav>
 
+    <br><br>
     <div class="row center-align">
-        <div id="videoboard"></div>
+        <img src="./img/faztCard-min1.png" class="responsive-img animated rollIn" alt="" id="pres-logo">
     </div>
 
-    <script src="dependencies/jquery/jquery-3.3.1.js"></script>
-    <script src="dependencies/materialize/js/materialize.js"></script>
-    <script src="js/loginService.js"></script>
-    <script>
-        window.onload = navRender();
-    </script>
+    <div class="row">
+        <div id="video-board"></div>
+    </div>
+
+    <!--<script src="dependencies/jquery/jquery-3.3.1.js"></script>-->
+    <script src="./dependencies/materialize/js/materialize.js"></script>
+    <script src="./js/loginService.js"></script>
+    <script src="./js/videboard.js"></script>
 
 </body>
 

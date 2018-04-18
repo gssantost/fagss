@@ -51,11 +51,14 @@ function login(data) {
         .then(resolve => resolve.json())
         .then(data => {
             console.log(data);
-            Materialize.toast(data.res, 2000);
+            //Materialize.toast(data.res, 2000);
+            M.toast({html: data.res, displayLength: 2000});
             //localStorage.setItem("userInfo", JSON.stringify(data.session));
-            setInterval(() => {
-                window.location.href = "userview.html";
-            }, 2000);
+            if (data.status === 200) {
+                setInterval(() => window.location.href = "userview.html", 2000);
+            } else {
+                console.log("Wrong!");
+            }
         })
         .catch(reject => {
             Materialize.toast("Imposible iniciar sesión: " + reject);

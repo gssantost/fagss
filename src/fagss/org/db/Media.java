@@ -5,9 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,240 +13,140 @@ import org.json.JSONObject;
 import fagss.org.util.PropertiesMap;
 
 public class Media {
-	
-	private Connection con = null;
-	private PreparedStatement pstm = null;
+
 	private ResultSet rs = null;
-	private ResultSetMetaData rsmd = null;
-	
+	private JSONObject res = new JSONObject();
+	private DBHelper db;
+	private PropertiesMap prop = PropertiesMap.getInstance();
+
 	public JSONObject setMedia(JSONObject json) {
-		JSONObject res = new JSONObject();
-		PropertiesMap prop = new PropertiesMap();
-		Calendar c = Calendar.getInstance();
-		
+		int queryRes;
 		try {
-			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm = con.prepareStatement(prop.getValue("Queries", "Q5"));
-			pstm.setString(1, json.getString("url"));
-			pstm.setString(2, json.getString("name"));
-			pstm.setString(3, json.getString("filename"));
-			pstm.setString(4, json.getString("description"));
-			pstm.setTimestamp(5, new java.sql.Timestamp(c.getTime().getTime()));
-			pstm.setString(6, json.getString("username"));
-			
-			if (pstm.executeUpdate() == 1) {
-				res.put("message", "video agregado");
+			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"),
+					prop.getValue("DB", "password"));
+			queryRes = db.update(prop.getValue("Queries", "Q5"), json.getString("url"), json.getString("name"),
+					json.getString("filename"), json.getString("description"), json.getString("username"));
+			if (queryRes == 1) {
+				res.put("message", "Su video ha sido agregado!");
 			} else {
 				res.put("message", "no se ha podido insertar");
 			}
-			
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				pstm.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			db.close();
 		}
-		
 		return res;
 	}
-	
-	public JSONArray getUserMedia(String query, Object... val) {
+
+	public JSONArray getAllVideos(JSONObject json) {
 		JSONArray res = new JSONArray();
-		PropertiesMap prop = new PropertiesMap();
-		
 		try {
-			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
-			for (int i = 0; i < val.length; i++) {
-				pstm.setObject(i + 1, val[i]);
-			}
-			
-			rs = pstm.executeQuery();
-			rsmd = rs.getMetaData();
-			rs.beforeFirst();
-			while (rs.next()) {
-				JSONObject row = new JSONObject();
-				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-					row.put(rsmd.getColumnLabel(i), rs.getObject(i));
-				}
-				res.put(row);
-			}
-			
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"),
+					prop.getValue("DB", "password"));
+			res = db.executeQuery(prop.getValue("Queries", "Q8"), json.getString("username"));
+		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				pstm.close();
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}	
+			db.close();
+		}
 		return res;
 	}
-	
-	//AHORA RETORNA LA MEDIA POR ID
+
+	// AHORA RETORNA LA MEDIA POR ID
 	public JSONObject getMedia(JSONObject json) {
-		JSONObject res = new JSONObject();
-		PropertiesMap prop = new PropertiesMap();
-		
 		try {
-			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm = con.prepareStatement(prop.getValue("Queries", "Q7"));
-			pstm.setInt(1, json.getInt("id"));
-			rs = pstm.executeQuery();
-			
+			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"),
+					prop.getValue("DB", "password"));
+			rs = db.execute(prop.getValue("Queries", "Q7"), json.getInt("id"));
 			while (rs.next()) {
 				res.put("url", rs.getString(1)).put("filename", rs.getString(2));
 			}
-			
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 			res.put("message", "no se ha podido descargar");
 		} finally {
-			try {
-				pstm.close();
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			db.close();
 		}
-		
 		return res;
 	}
-	
+
 	public String getVideo(int id) {
 		String res = null;
-		PropertiesMap prop = new PropertiesMap();
-		
 		try {
-			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm = con.prepareStatement(prop.getValue("Queries", "Q9"));
-			pstm.setInt(1, id);
-			rs = pstm.executeQuery();
+			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"),
+					prop.getValue("DB", "password"));
+			rs = db.execute(prop.getValue("Queries", "Q9"), id);
 			while (rs.next()) {
 				res = rs.getString(1);
 			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				pstm.close();
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			db.close();
 		}
-		
 		return res;
 	}
 
-	public JSONObject likes(JSONObject json) {
-		JSONObject res= new JSONObject();
-		PropertiesMap prop = new PropertiesMap();
-		
+	public JSONObject removeVideo(int id) {
+		PreparedStatement remLikes = null;
+		PreparedStatement remComments = null;
+		PreparedStatement remVideo = null;
+		Connection con = null;
+
 		try {
 			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm= con.prepareStatement(prop.getValue("Queries", "Q12"));
-			pstm.setInt(1, json.getInt("media_id"));
-			pstm.setInt(2, json.getInt("id_user"));
-			if (pstm.executeUpdate() == 1) {
-				res.put("message", "te ha gustado");
-			} else {
-				res.put("message", "no se ha podido insertar");
-			}
-
-						
+			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"),
+					prop.getValue("DB", "password"));
+			con.setAutoCommit(false);
+			remLikes = con.prepareStatement(prop.getValue("Queries", "Q22"));
+			remComments = con.prepareStatement(prop.getValue("Queries", "Q23"));
+			remVideo = con.prepareStatement(prop.getValue("Queries", "Q24"));
+			remLikes.setInt(1, id);
+			remLikes.executeUpdate();
+			remComments.setInt(1, id);
+			remComments.executeUpdate();
+			remVideo.setInt(1, id);
+			remVideo.executeUpdate();
+			con.commit();
+			res.put("message", "Video eliminado");
 		} catch (ClassNotFoundException | IOException | SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
-				pstm.close();
-				con.close();
+				//con.setAutoCommit(true);
+				if (remLikes != null) {
+					remLikes.close();
+				}
+				if (remComments != null) {
+					remComments.close();
+				}
+				if (remVideo != null) {
+					remVideo.close();
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
 		return res;
 	}
-
-	public JSONObject comment(JSONObject json) {
-		JSONObject res= new JSONObject();
-		PropertiesMap prop = new PropertiesMap();
-		Calendar c = Calendar.getInstance();
-		
+	
+	public boolean isUserVideo(JSONObject json) {
+		boolean q = false;
 		try {
-			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm= con.prepareStatement(prop.getValue("Queries", "Q14"));
-			pstm.setInt(1, json.getInt("media_id"));
-			pstm.setInt(2, json.getInt("id_user"));
-			pstm.setTimestamp(3, new java.sql.Timestamp(c.getTime().getTime()));
-			pstm.setString(4, json.getString("comment"));
-			if (pstm.executeUpdate() == 1) {
-				res.put("message", "comentario insertado");
-			} else {
-				res.put("message", "no se ha podido insertar");
+			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
+			rs = db.execute(prop.getValue("Queries", "Q25"), json.getInt("id_user"), json.getInt("media_id"));
+			if (rs.next()) {
+				q = true;
 			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				pstm.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			db.close();
 		}
-		
-		return res;
-		
-		}
-
-	public JSONObject dislikes(JSONObject json) {
-		JSONObject res= new JSONObject();
-		PropertiesMap prop = new PropertiesMap();
-		
-		try {
-			Class.forName(prop.getValue("DB", "driver"));
-			con = DriverManager.getConnection(prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			pstm= con.prepareStatement(prop.getValue("Queries", "Q13"));
-			pstm.setInt(1, json.getInt("id_user"));
-			pstm.setInt(2, json.getInt("media_id"));
-			if (pstm.executeUpdate() == 1) {
-				res.put("message", "has hecho dislike");
-			} else {
-				res.put("message", "no se ha podido insertar");
-			}
-
-						
-		} catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				pstm.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		return res;
-
+		return q;
 	}
+
 }

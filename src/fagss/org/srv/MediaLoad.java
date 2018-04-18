@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import fagss.org.facade.QueryFacade;
-import fagss.org.util.PropertiesMap;
 
 /**
  * SERVLET implementation class MediaLoad
@@ -35,13 +34,11 @@ public class MediaLoad extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		PropertiesMap prop = new PropertiesMap();
 		QueryFacade facade = new QueryFacade();
 		JSONObject data = (JSONObject) session.getAttribute("session");	
-		JSONArray userVideos = facade.getUserMedia(prop.getValue("Queries", "Q8"), data.getString("username"));
+		JSONArray userVideos = facade.getAllVideos(data);
 		out.print(userVideos);
 	}
 

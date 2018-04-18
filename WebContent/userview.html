@@ -3,74 +3,138 @@
 <html>
 
 <head>
-    <title>Fazt :: MiCanal</title>
+    <title>Fazt : Mi Canal</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0">
-    <link rel="stylesheet" href="./dependencies/materialize/css/materialize.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="dependencies/materialize/css/materialize.css">
+    <link rel="stylesheet" href="dependencies/animate.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
     <nav>
         <div class="nav-wrapper grey lighten-5">
-            <a href="#" class="brand-logo black-text">: Fazt :</a>
+            <a href="#" class="brand-logo black-text">
+                F A Z T
+            </a>
             <ul id="nav-list" class="right">
-                <li><a href="index.html" class="teal-text darken-3">Home</a></li>
-                <li><a id="user-anchor" class="teal-text darken-3"></a></li>
-                <li><a id="session-anchor" class="teal-text darken-3"></a></li>
+                <li>
+                    <a href="index.html" class="teal-text darken-3">Home</a>
+                </li>
+                <li>
+                    <a id="user-anchor" class="teal-text darken-3"></a>
+                </li>
+                <li>
+                    <a id="session-anchor" class="teal-text darken-3"></a>
+                </li>
             </ul>
         </div>
     </nav>
     <br>
     <div class="row">
-        <div class="col l2 grey lighten-3 z-depth-1-half" id="user-bar">
+        <div class="col l1"></div>
 
-        </div>
-
-        <div class="col l10">
+        <div class="col l10 z-depth-3 base-column">
             <div class="row">
                 <h1 class="teal-text center-align" id="title"></h1>
+                <div class="divider"></div>
+                <div class="section">
+                    <div class="col l4 center-align">
+                        <i class="material-icons">account_circle</i>
+                        <p id="name"><strong>NAME</strong><br></p>
+                    </div>
+                    <div class="col l4 center-align">
+                        <i class="material-icons">face</i>
+                        <p id="user"><strong>USERNAME</strong><br></p>
+                    </div>
+                    <div class="col l4 center-align">
+                        <i class="material-icons">grade</i>
+                        <p id="type"><strong>TYPE</strong><br></p>
+                    </div>
+                </div>
             </div>
 
             <div class="row center-align">
-                <div class="row">
-                    <div class="input-field">
-                        <label for="name">Nombre: </label>
-                        <input type="text" name="name" id="name" class="validate">
-                    </div>
-                    <div class="input-field">
-                        <label for="description">Descripción: </label>
-                        <input type="text" name="description" id="descrip" class="validate">
-                    </div>
-
-                    <div class="file-field input-field">
-                        <div class="btn">
-                            <span>Archivo: </span>
-                            <input type="file" name="file" id="file" accept="video/*">
+                <!-- Modal Trigger -->
+                <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Subir Video</a>
+                <!-- Modal Structure -->
+                <div id="modal1" class="modal">
+                    <div class="modal-content">
+                        <h4>Upload Your Video</h4>
+                        <div class="row">
+                            <div class="input-field">
+                                <label for="name">Nombre: </label>
+                                <input type="text" name="name" id="name" class="validate">
+                            </div>
+                            <div class="input-field">
+                                <label for="description">Descripción: </label>
+                                <input type="text" name="description" id="descrip" class="validate">
+                            </div>
+                            <div class="file-field input-field">
+                                <div class="btn">
+                                    <span>Archivo: </span>
+                                    <input type="file" name="file" id="file" accept="video/*">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input type="text" class="file-path validate">
+                                </div>
+                            </div>
+                            <button class="btn waves-effect waves-light" onclick="upload()">Subir!</button>
+                            <br>
+                            <br>
+                            <div id="fetch-loader">
+                                <div class="preloader-wrapper big active">
+                                    <div class="spinner-layer spinner-blue-only">
+                                        <div class="circle-clipper left">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="gap-patch">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="circle-clipper right">
+                                            <div class="circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="flow-text" id="response-text"></p>
                         </div>
-                        <div class="file-path-wrapper">
-                            <input type="text" class="file-path validate">
+                        <div class="modal-footer">
+                            <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="moreUpload()">Subir Otro Video</a>
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Volver</a>
                         </div>
                     </div>
-
-                    <button class="btn waves-effect waves-light" onclick="upload()">Subir!</button>
                 </div>
+                <!-- end of MODAL -->
+                <br>
+                <br>
             </div>
-            <br>
-            <br>
-            <!-- A ÉSTE DIV SE AÑADEN LOS VIDEOS DE MANERA DINÁMICA -->
-            <div class=row id="video-board">
-            </div>
+            <!-- end of row -->
         </div>
+        <div class="col l1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col l1"></div>
+        <div class="col l10">
+            <div class="row" id="video-board"></div>
+        </div>
+        <div class="col l1"></div>
     </div>
 
     <div class="row">
         <div class="col m12 l12 right-align">
-            <a href="index.html"><button class="btn waves-effect waves-light blue-grey">Regresar</button></a>
+            <a href="index.html">
+                <button class="btn waves-effect waves-light blue-grey">Regresar</button>
+            </a>
         </div>
     </div>
 
 
-    <script src="./dependencies/jquery/jquery-3.3.1.js"></script>
+    <!--<script src="./dependencies/jquery/jquery-3.3.1.js"></script>-->
     <script src="./dependencies/materialize/js/materialize.js"></script>
 
     <!-- <script src="js/sessiontracker.js"></script> -->

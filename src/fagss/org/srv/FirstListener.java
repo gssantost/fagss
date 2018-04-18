@@ -5,6 +5,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import fagss.org.util.DirectoryManager;
+import fagss.org.util.PropertiesMap;
 
 /**
  * Application Lifecycle Listener implementation class FirstListener
@@ -32,6 +33,8 @@ public class FirstListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent arg0)  { 
 		DirectoryManager.createStoragePath();
+		@SuppressWarnings("unused")
+		PropertiesMap prop = PropertiesMap.getInstance();
 	}
 	
 }

@@ -10,23 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import fagss.org.db.DBHelper;
-import fagss.org.util.PropertiesMap;
+import fagss.org.facade.QueryFacade;
 
 /**
- * SERVLET implementation class Video
+ * Servlet implementation class RemoveMyComment
  */
-@WebServlet("/Video")
-public class Video extends HttpServlet {
+@WebServlet("/removeMyComment")
+public class RemoveMyComment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Video() {
+    public RemoveMyComment() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,25 +35,32 @@ public class Video extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		PropertiesMap prop = PropertiesMap.getInstance();
-		DBHelper db = null;;
-		JSONObject res = new JSONObject();
-		JSONArray selected = new JSONArray();
-		try {
-			db = new DBHelper(prop.getValue("DB", "driver"), prop.getValue("DB", "url"), prop.getValue("DB", "user"), prop.getValue("DB", "password"));
-			selected = db.executeQuery(prop.getValue("Queries", "Q10"), Integer.parseInt(request.getParameter("id")));
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			db.close();
-		}
+		JSONObject res = null;
+		int mediaId = Integer.parseInt(request.getParameter("id"));
+		int commentId = Integer.parseInt(request.getParameter("comment_id"));
 		
 		if (!session.isNew()) {
 			JSONObject userData = (JSONObject) session.getAttribute("session");
-			System.out.println(userData);
-			res.put("status", 200).put("mediaInfo", selected).put("typeInfo", userData.getInt("typeUser")); //LE ENVÍO EL TYPEUSER DE LA SESIÓN (2 O 3 / USER O ADMIN)
+			QueryFacade facade = new QueryFacade();
+			String mediaUrl = facade.getVideo(mediaId);
+			System.out.println(mediaUrl);
+			if (userData.getInt("typeUser") == 2 || userData.getInt("typeUser") == 3) {
+				JSONObject json = new JSONObject();
+				json.put("id_user", userData.getInt("id")).put("media_id", mediaId).put("comment_id", commentId);
+				if (facade.isUserComment(json)) {
+					res = facade.deleteComment(json);
+					res.put("status", 200);
+				} else {
+					res = new JSONObject();
+					res.put("status", 403).put("msg", "Éste video no está asociado a su usuario");
+				}
+			} else {
+				res = new JSONObject();
+				res.put("status", 200).put("msg", "Usuario no posee suficientes requerimientos para ejecutar ésta acción");
+			}
 		} else {
-			res.put("status", 200).put("mediaInfo", selected).put("typeInfo", 1); //LE INDICO EL TYPE_ID 1 (GUEST)
+			res = new JSONObject();
+			res.put("status", 500).put("msg", "Debe poseer una sesión para ésta opción");
 			session.invalidate();
 		}
 		out.print(res);
@@ -65,6 +70,7 @@ public class Video extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
